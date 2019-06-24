@@ -42,7 +42,7 @@ public class Escalonador extends Thread{
         cont = 0;
     }
     
-    public void inicia(){
+    /*public void inicia(){
         filaM.put(0, fila1);
         filaM.put(1, fila2);
         int id = pegaIndex();
@@ -54,19 +54,12 @@ public class Escalonador extends Thread{
         }
         //p.perm = 1;
         
-    }
+    }*/
     
     public void adiciona(List<Processo> l){
         
         for(Processo proc:l){
-            if(proc.id%2!=0){
             fila1.add(proc);
-            //System.out.println("Adicionado a fila 1");
-        }
-        else{
-            fila2.add(proc);
-            //System.out.println("Adicionado a fila 2");
-        }
         }
     }
     
@@ -100,29 +93,68 @@ public class Escalonador extends Thread{
         return aux;
     }
     
+    public Processo pegaFirst(){
+        Processo aux;
+        aux = fila1.element();
+        return aux;
+    }
+    
+    public void tira(){
+        fila1.remove();
+    }
+    
+    public void movimenta(){
+        Processo aux = fila1.element();
+        fila1.remove();
+        fila1.add(aux);
+    }
+    
     public void executa() throws InterruptedException{
-        for(Processo i:lista){
-            //System.out.println(i.nome);
-            i.perm++;
-            //lista.remove(i);
+
+        for(Processo p:lista){
+            p.flag = 1;
         }
+
+        Thread.sleep(5000);
         
+        for(Processo p:lista){
+            if(p.flag == 0){
+
+                p.largar();
+            }
+        }
         lista.clear();
-        //p = atualiza();
-        //lista.add(p);
-        //System.out.println("proxico cabeça "+p.nome);
         
-        
-        
-        
-        cont++;
-        //Thread.sleep(5000);
     }
     
     @Override
     public void run(){
-        inicia();
         
+        
+        while(!fila1.isEmpty()&&rc.allClear()==1){
+            Processo aux = pegaFirst();
+            if(aux.rc.teste(aux)==1){
+                System.out.println("here1");
+                lista.add(aux);
+                tira();
+                //System.out.println(pegaFirst().nome);
+                Processo rest = pegaFirst();
+                while(rest.rc.teste(rest)!=1){
+                    movimenta();
+                    rest = pegaFirst();
+                }
+                lista.add(rest);
+                try {
+                    System.out.println("here");
+                    executa();
+                    fila1.add(aux);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Escalonador.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                //System.out.println("here2");
+            }
+        }
         
     }
     

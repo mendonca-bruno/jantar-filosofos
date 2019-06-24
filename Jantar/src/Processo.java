@@ -22,7 +22,7 @@ public class Processo extends Thread{
     RC rc;
     Semaphore sem2;
     Semaphore sem3;
-    int perm;
+    int times;
     
     public Processo(int id,String nome, Escalonador e, Semaphore s, RC r, Semaphore s2, Semaphore s3){
         this.id = id;
@@ -34,7 +34,7 @@ public class Processo extends Thread{
         rc = r;
         sem2 = s2;
         sem3 = s3;
-        perm=0;
+        times=0;
     }
     
     @Override
@@ -69,10 +69,9 @@ public class Processo extends Thread{
     
     @Override
     public void run(){
-        int cont = 0;
-        while(perm!=1){
-            System.out.println("BIRI");
-        }
+       
+        
+        
     }
 //    @Override
 //    public void run(){

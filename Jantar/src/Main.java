@@ -29,15 +29,16 @@ public class Main {
         e.adiciona(filosofos);
         
         e.start();
-        //filosofos.get(0).start();
-        //filosofos.get(2).start();
-        //filosofos.get(3).start();
-        //filosofos.get(1).start();
-        //filosofos.get(4).start();
+//        filosofos.get(0).start();
+//        filosofos.get(2).start();
+//        filosofos.get(3).start();
+//        filosofos.get(1).start();
+//        filosofos.get(4).start();
         //e.inicia();
-        /*for(Processo p:filosofos){
+        for(Processo p:filosofos){
             p.start();
-        }*/
+        }
+        
 //        filosofos.get(0).start();
 //        filosofos.get(1).start();
     }
