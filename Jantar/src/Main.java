@@ -4,7 +4,7 @@ import java.util.concurrent.Semaphore;
 
 public class Main {
     public static void main(String[] args) {
-        Semaphore sem = new Semaphore(2);
+        Semaphore sem = new Semaphore(1);
         RC rc = new RC();
         Escalonador e = new Escalonador(sem, rc);
         List<Processo> filosofos = new ArrayList<>();

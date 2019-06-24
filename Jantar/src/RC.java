@@ -23,14 +23,17 @@ public class RC {
             }else return 0;
         }
     }
+ 
     
     public void pegaGarfo(Processo p) throws InterruptedException{
         if(p.id!=5){
             System.out.println("Filosofo "+p.nome+" pegou o garfo "+ p.id+" e "+(p.id+1));
             System.out.println("Filosofo " +p.nome+" esta comendo");
+            System.out.println();
         }else{
             System.out.println("Filosofo "+p.nome+" pegou o garfo "+ p.id+" e "+1);
             System.out.println("Filoso " +p.nome+" esta comendo");
+            System.out.println();
             
         }
     }

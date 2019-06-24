@@ -50,33 +50,58 @@ public class Escalonador extends Thread{
         
     }
     
+    public void aloca() throws InterruptedException{
+        System.out.println("Alocando recursos");
+        Thread.sleep(2000);
+    }
+    
+    public void pensa(){
+        Processo aux;
+        for(int i=0; i<4; i++){
+            aux = pegaFirst();
+            if(aux.flag!=1){
+                aux.Pensar();
+                movimenta();
+            }
+            else{
+               movimenta();
+            }
+        }
+    }
+    
     @Override
     public void run(){       
-        
-        while(!fila1.isEmpty()&&rc.allClear()==1){
+        int cont = 0;
+        while(cont<10&&rc.allClear()==1){
             Processo aux = pegaFirst();
             if(aux.rc.tentaPegar(aux)==1){
                 System.out.println("**************");
+                System.out.println("Ciclo "+cont);
                 tira();
                 Processo rest = pegaFirst();
                 while(rest.rc.tentaPegar(rest)!=1){
+                    
                     movimenta();
                     rest = pegaFirst();
                 }                
                 aux.flag = 1;
                 rest.flag = 1;
                 try {
+                    aloca();
+                    pensa();
                     aux.comer();
                     rest.comer();
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Escalonador.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 try {
+                    
                     executa(aux, rest);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Escalonador.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 fila1.add(aux);
+                cont++;
             }else{
                 //do something
             }

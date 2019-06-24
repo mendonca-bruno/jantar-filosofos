@@ -29,18 +29,19 @@ public class Processo extends Thread{
     }
     
     public void comer() throws InterruptedException{
-        if(flag==1&&times<2){
+        if(flag==1){
             sem.acquire();
             rc.pegaGarfo(this);
             flag = 0;
-            times++;
+            //times++;
             sem.release();
         }
         
     } 
     
     public void Pensar(){
-        System.out.println("Filosofo "+nome+" esta pensando se a muie ta traindo ele");
+        System.out.println("Filosofo "+nome+" esta pensando...");
+        System.out.println();
     }
     
 }
