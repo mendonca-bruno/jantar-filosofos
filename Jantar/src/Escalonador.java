@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -20,13 +21,15 @@ import java.util.logging.Logger;
  *
  * @author WinSeven
  */
-public class Escalonador{
+public class Escalonador extends Thread{
     Queue<Processo> fila1;
     Queue<Processo> fila2;
     Map<Integer,Queue> filaM;
     RC rc;
     int index;
     Processo p;
+    List<Processo> lista;
+    int cont;
     
     public Escalonador(Semaphore s, RC r){
         fila1 = new LinkedList<>();
@@ -35,6 +38,8 @@ public class Escalonador{
         rc = r;
         index = -1;
         p = null;
+        lista = new ArrayList<>();
+        cont = 0;
     }
     
     public void inicia(){
@@ -42,17 +47,25 @@ public class Escalonador{
         filaM.put(1, fila2);
         int id = pegaIndex();
         p = (Processo) filaM.get(id).element();
+        lista.add(p);
+        if(rc.allClear()==1){
+            System.out.println("done");
+            p.rc.teste(p);
+        }
+        //p.perm = 1;
+        
     }
     
     public void adiciona(List<Processo> l){
+        
         for(Processo proc:l){
             if(proc.id%2!=0){
             fila1.add(proc);
-            System.out.println("Adicionado a fila 1");
+            //System.out.println("Adicionado a fila 1");
         }
         else{
             fila2.add(proc);
-            System.out.println("Adicionado a fila 2");
+            //System.out.println("Adicionado a fila 2");
         }
         }
     }
@@ -63,25 +76,54 @@ public class Escalonador{
     }
     
     public int checa(Processo proc){
-        if(p == null){
-            //atualiza();
-            return 0;
-        }
+        if(p == null)return 0;
+        
         else if(p.id == proc.id){
-            //atualiza();
+            atualiza();
             return 1;
         }
-        else{
-            //atualiza();
-            return 0;
-        }        
+        else if((p.id!=proc.id)&&(p.procs==2)){
+            //System.out.println("aqui");
+            atualiza();
+            return 1;
+        }
+        else return 0;       
     }
     
-    public void atualiza(){
-        int id = pegaIndex();
-        p = (Processo) filaM.get(id).element();
-        filaM.get(id).remove();
-        filaM.get(id).add(p);
+    public Processo atualiza(){
+        Processo aux;
+        aux = (Processo) filaM.get(index).element();
+        filaM.get(index).remove();
+        filaM.get(index).add(aux);
+        index = pegaIndex();
+        aux = (Processo) filaM.get(index).element();
+        return aux;
+    }
+    
+    public void executa() throws InterruptedException{
+        for(Processo i:lista){
+            //System.out.println(i.nome);
+            i.perm++;
+            //lista.remove(i);
+        }
+        
+        lista.clear();
+        //p = atualiza();
+        //lista.add(p);
+        //System.out.println("proxico cabeça "+p.nome);
+        
+        
+        
+        
+        cont++;
+        //Thread.sleep(5000);
+    }
+    
+    @Override
+    public void run(){
+        inicia();
+        
+        
     }
     
   
