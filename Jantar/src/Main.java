@@ -25,17 +25,17 @@ public class Main {
         while(cont <5&&rc.allClear()==1){
             System.out.println("Alocando recursos . . .");
             System.out.println();
-            Thread.sleep(4000);
+            Thread.sleep(4000); // 4segundos para alocar (2 segundos primeiro filosofo) (2 segundos segundo filosofo)
             System.out.println("************************");
             System.out.println();
-            p = e.achaFilosofo();
+            p = e.achaFilosofo(); //pega filosofo que consegue pegar os dois garfos
             q = e.achaFilosofo();
-            p.setFlag(1);
+            p.setFlag(1); // muda flag dos processos que conseguiram pegar garfos - assim que a flag for alterada conseguem comer
             q.setFlag(1);
-            e.pensa();
-            e.sincroniza();
+            e.pensa(); //coloca os que nao conseguiram comer para pensar
+            e.sincroniza(); //espera a flag do escalonador chegar a 2 que significa que os dois ja comeram
             if(e.checaFlag(p, q)==1)e.largaGarfos(p, q);
-            e.addElement(p);
+            e.addElement(p); //adiciona o primeiro filosofo encontrado ao final da fila
             cont++;
             System.out.println("************************");
             System.out.println();
