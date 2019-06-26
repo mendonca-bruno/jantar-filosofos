@@ -1,11 +1,13 @@
 import java.util.concurrent.Semaphore;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Processo extends Thread{
     int id;
     String nome;
     Escalonador esc;
     Semaphore sem;
-    int flag;
+    volatile int flag;
     RC rc;
     int times;
     
@@ -18,6 +20,9 @@ public class Processo extends Thread{
         rc = r;
         times=0;
     }
+    
+    public synchronized void setFlag(int value){this.flag=value;}
+    public synchronized int getFlag(){return this.flag;}
     
     @Override
     public String toString(){        
@@ -33,7 +38,7 @@ public class Processo extends Thread{
             sem.acquire();
             rc.pegaGarfo(this);
             flag = 0;
-            //times++;
+            times++;
             sem.release();
         }
         
@@ -41,7 +46,25 @@ public class Processo extends Thread{
     
     public void Pensar(){
         System.out.println("Filosofo "+nome+" esta pensando...");
-        System.out.println();
+    }
+    
+    
+    @Override
+    public void run(){
+        boolean roda = true;
+        while(roda){
+            if(flag==1){
+                try {
+                    comer();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Processo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                esc.setFree((esc.getFree()+1));
+                if (times == 2) roda = false;
+            }
+            
+        }
+        
     }
     
 }

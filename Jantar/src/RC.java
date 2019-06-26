@@ -7,32 +7,34 @@ public class RC {
         acess = 0;
     }
     
+    public synchronized int getAcess(){return this.acess;}
+    
     public int tentaPegar(Processo p){
         
+        if(p.id!=5) {if(garfo[p.id]!=1 && garfo[(p.id+1)]!=1)return 1; else return 0;}
+        else {if(garfo[p.id]!=1 && garfo[1]!=1)return 1; else return 0;}
+        
+    }
+    
+    public void aloca(Processo p){
         if(p.id!=5){
-            if(garfo[p.id]!=1 && garfo[(p.id+1)]!=1){
-                garfo[p.id]=1;
-                garfo[(p.id+1)]=1;
-                return 1;
-            }else return 0;
+            garfo[p.id]=1;
+            garfo[(p.id+1)]=1;
         }else{
-            if(garfo[p.id]!=1 && garfo[1]!=1){
-                garfo[p.id]=1;
-                garfo[1]=1;
-                return 1;
-            }else return 0;
+            garfo[p.id]=1;
+            garfo[1]=1;
         }
+        if(acess==0) acess++;
+        else if(acess == 1) acess=0;
     }
  
     
     public void pegaGarfo(Processo p) throws InterruptedException{
         if(p.id!=5){
-            System.out.println("Filosofo "+p.nome+" pegou o garfo "+ p.id+" e "+(p.id+1));
-            System.out.println("Filosofo " +p.nome+" esta comendo");
+            System.out.println("Filosofo " +p.nome+" esta comendo. garfo "+p.id+" e "+(p.id+1));
             System.out.println();
         }else{
-            System.out.println("Filosofo "+p.nome+" pegou o garfo "+ p.id+" e "+1);
-            System.out.println("Filoso " +p.nome+" esta comendo");
+            System.out.println("Filosofo " +p.nome+" esta comendo. garfo "+p.id+" e "+1);
             System.out.println();
             
         }
